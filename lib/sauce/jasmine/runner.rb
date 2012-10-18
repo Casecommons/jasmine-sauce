@@ -22,10 +22,11 @@ module Sauce
                                          :host => @server.host,
                                          :port => @config.port,
                                          :quiet => @config.quiet_tunnel?)
+        @tunnel.connect
         @tunnel.wait_until_ready
         puts "Sauce Connect ready"
       end
-      
+
       def run_tests
         puts "running tests..."
         browsers = Sauce::Config.new.browsers
@@ -68,7 +69,7 @@ module Sauce
       end
 
       def run_tests_in_browser(os, browser, browser_version)
-        driver = SeleniumDriver.new(os, browser, browser_version, @config.tunnel_domain)
+        driver = SeleniumDriver.new(os, browser, browser_version, @config.tunnel_domain, @config.server, @server.host, @config.port)
         driver.connect
         job_id = driver.job_id
         begin
